@@ -13,21 +13,21 @@ public class Library {
     public static final String ADD_STUDENT_SUCCESS = "学生%s的成绩被添加";
     private ConsoleReader source;
 
-    public boolean someLibraryMethod() {
-        return true;
-    }
-
     public Library() {
         source = new ConsoleReader();
     }
 
     public void Start() {
         System.out.print(MAIN_INFORMATION);
-        selectChoice(MAIN_HINT);
+        int selection;
+        do {
+            selection = selectChoice(MAIN_HINT);
+            action(selection);
+        }while (selection != 3);
     }
 
     public Integer selectChoice(String hint) {
-        System.out.print(ADD_STUDENT_HINT);
+        System.out.print(hint);
         return Integer.valueOf(source.read());
     }
 
@@ -36,7 +36,7 @@ public class Library {
     }
 
     public boolean action(int selection) {
-        System.out.print("学生Tom的成绩被添加");
+        System.out.print("学生Tom的成绩被添加\n");
         return true;
     }
 
