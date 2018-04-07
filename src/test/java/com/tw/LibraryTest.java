@@ -82,4 +82,20 @@ public class LibraryTest {
 
     }
 
+    @Test
+    public void should_return_1_subject() {
+        Subject subject = new Subject("数学", 100d);
+        Subject result = library.parseSubjectFromString(" 数学 :  100");
+        assertEquals(subject, result);
+    }
+
+    @Test
+    public void should_parse_string_to_student_object() {
+        Student student = library.parseString("Tom, 110, 数学:75, 语文:95, 英语:100");
+        assertEquals("Tom", student.name );
+        assertEquals("110", student.number );
+        assertEquals(new Subject("数学", 75d), student.subjectList.get(0));
+        assertEquals(new Subject("语文", 95d), student.subjectList.get(1));
+        assertEquals(new Subject("英语", 100d), student.subjectList.get(2));
+    }
 }
