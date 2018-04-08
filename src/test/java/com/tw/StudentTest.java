@@ -13,7 +13,7 @@ public class StudentTest {
     }
 
     @Test
-    public void should_return_average_number() {
+    public void should_calculate_average_number() {
         Student student = new Student("Tom", "110");
         Subject math = new Subject("数学", 75d);
         Subject chinese = new Subject("语文", 95d);
@@ -25,7 +25,7 @@ public class StudentTest {
     }
 
     @Test
-    public void should_return_total_number() {
+    public void should_calculate_total_number() {
         Student student = new Student("Tom", "110");
         Subject math = new Subject("数学", 75d);
         Subject chinese = new Subject("语文", 95d);

@@ -24,7 +24,6 @@ public class Subject {
         if (obj == null) return false;
         if(obj.getClass() != this.getClass()) return false;
         Subject subject = (Subject) obj;
-        return (Objects.equals(subject.getName(), this.getName()))
-                && Objects.equals(subject.getScore(), this.getScore());
+        return (Objects.equals(subject.getName(), this.getName()));
     }
 }
