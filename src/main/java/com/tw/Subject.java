@@ -19,6 +19,10 @@ public class Subject {
         return score;
     }
 
+    public String getScoreString() {
+        return Utils.doubleToString(score);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) return false;

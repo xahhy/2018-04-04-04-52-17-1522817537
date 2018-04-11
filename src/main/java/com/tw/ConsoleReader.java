@@ -8,6 +8,6 @@ public class ConsoleReader {
 
     public ConsoleReader() { source = new Scanner(System.in);}
     public String read(){
-        return source.next();
+        return source.nextLine();
     }
 }

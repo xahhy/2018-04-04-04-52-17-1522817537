@@ -1,8 +1,10 @@
 package com.tw;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Student {
     public String name;
@@ -16,21 +18,17 @@ public class Student {
     }
 
 
-    public void addSubject(Subject subject) {
-        subjectList.add(subject);
+    public void addSubject(Subject... subjects) {
+        subjectList.addAll(Arrays.asList(subjects));
     }
 
-    public double averageScore() {
-        return round(
+    public Double averageScore() {
+        return Utils.round(
                 subjectList.stream()
                         .mapToDouble(Subject::getScore)
                         .average()
                         .getAsDouble()
         );
-    }
-
-    private double round(double number) {
-        return (int) (number * 100) / 100d;
     }
 
     public double totalScore() {
@@ -39,4 +37,26 @@ public class Student {
                 .sum();
     }
 
+    public String genScoreString(Subject... subjects) {
+        List<String> scoreList = Stream.of(subjects)
+                .map(subject -> {
+                    if (!this.subjectList.contains(subject)) {
+                        return "--";
+                    }else
+                        return subjectList.get(subjectList.indexOf(subject)).getScoreString();
+                })
+                .collect(Collectors.toList());
+        String result = Stream.of(this.name, scoreList, Utils.doubleToString(this.averageScore()), Utils.doubleToString(this.totalScore()))
+                .flatMap(item->{
+                    if (item.getClass().equals(ArrayList.class)) {
+                        return scoreList.stream();
+                    }else
+                        return Stream.of(item);
+                })
+                .map(item->{
+                    return item.toString();
+                })
+                .collect(Collectors.joining("|"));
+        return result;
+    }
 }

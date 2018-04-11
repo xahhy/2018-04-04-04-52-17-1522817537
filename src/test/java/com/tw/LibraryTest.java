@@ -5,10 +5,9 @@ import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -149,5 +148,105 @@ public class LibraryTest {
         assertTrue(subjectList.stream().allMatch(subject -> expectSubjects.stream()
                 .anyMatch(expectSubject -> expectSubject.getName() == subject.getName())
         ));
+    }
+
+    @Test
+    public void should_get_title_of_all_distinct_subject_from_students() {
+        fillLibraryWith3Students();
+        String title = library.getScoreTableTitle();
+        assertEquals("姓名|数学|语文|英语|编程|平均分|总分", title);
+    }
+
+    @Test
+    public void should_generate_score_result_of_each_student() {
+        Student student = new Student("Tom", "110");
+        Subject math = new Subject("数学", 75d);
+        Subject chinese = new Subject("语文", 95d);
+        Subject english = new Subject("英语", 80d);
+        Subject program = new Subject("编程", 80d);
+        student.addSubject(math, chinese, english, program);
+        Subject[] subjectArray = Stream.of(math, chinese, english, program)
+                .toArray(Subject[]::new);
+        String result = student.genScoreString(subjectArray);
+        assertEquals("Tom|75|95|80|80|82.5|330", result);
+    }
+
+    @Test
+    public void should_generate_score_result_when_student_dont_have() {
+        Student student = new Student("Tom", "110");
+        Subject math = new Subject("数学", 75d);
+        Subject chinese = new Subject("语文", 95d);
+        Subject english = new Subject("英语", 80d);
+        Subject program = new Subject("编程", 80d);
+        student.addSubject(math, chinese, program);
+        Subject[] subjectArray = Stream.of(math, chinese, english, program)
+                .toArray(Subject[]::new);
+        String result = student.genScoreString(subjectArray);
+        assertEquals("Tom|75|95|--|80|83.33|250", result);
+    }
+
+    @Test
+    public void should_get_all_students_average_score() {
+        fillLibraryWith2Students();
+        Double allAverageScore = library.getAllTotalAverageScore();
+        assertEquals(327.5d, allAverageScore, 0d);
+    }
+
+    @Test
+    public void should_get_all_2_students_middle_score() {
+        fillLibraryWith2Students();
+        Double allAverageScore = library.getAllTotalMiddleScore();
+        assertEquals(327.5d, allAverageScore, 0d);
+    }
+
+    @Test
+    public void should_get_all_3_students_middle_score() {
+        fillLibraryWith3Students();
+        Double allAverageScore = library.getAllTotalMiddleScore();
+        assertEquals(325d, allAverageScore, 0d);
+    }
+
+    @Test
+    public void should_get_score_list() {
+        fillLibraryWith3Students();
+        String scoreListString = library.getScoreListString();
+        assertEquals("成绩单\n姓名|数学|语文|英语|编程|平均分|总分\n" +
+                "========================\n" +
+                "Tom|75|95|80|80|82.5|330\n" +
+                "Jerry|85|80|70|90|81.25|325\n" +
+                "Bob|85|80|70|90|81.25|325\n" +
+                "========================\n" +
+                "全班总分平均数:326.67\n" +
+                "全班总分中位数:325\n", scoreListString);
+    }
+
+    private void fillLibraryWith2Students() {
+        Student tom = new Student("Tom", "110");
+        Student jerry = new Student("Jerry", "111");
+        tom.addSubject(
+                new Subject("数学", 75d),
+                new Subject("语文", 95d),
+                new Subject("英语", 80d),
+                new Subject("编程", 80d)
+        );
+        jerry.addSubject(
+                new Subject("数学", 85d),
+                new Subject("语文", 80d),
+                new Subject("英语", 70d),
+                new Subject("编程", 90d)
+        );
+        library.addStudent(tom, jerry);
+    }
+
+    private void fillLibraryWith3Students() {
+        fillLibraryWith2Students();
+        Student bob = new Student("Bob", "112");
+        bob.addSubject(
+                new Subject("数学", 85d),
+                new Subject("语文", 80d),
+                new Subject("英语", 70d),
+                new Subject("编程", 90d)
+        );
+        library.addStudent(bob);
     }
 }
